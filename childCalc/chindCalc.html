@@ -35,7 +35,7 @@
 
             <div class="row">
                 <div class="col-xs-11">
-                    <input type="button" class="btn btn-default" value="开始"/>
+                    <input type="button" class="btn btn-default" value="开始" />
                     <!--<div class="input-group">-->
                     <!--<span class="input-group-addon">-->
                     <!--<input type="checkbox"/>-->
@@ -48,7 +48,7 @@
 
             <div class="input-group">
                 <span class="input-group-addon question"></span>
-                <input type="number" class="form-control answer" placeholder="">
+                <input type="number" class="form-control answer" placeholder="" >
             </div>
         </div>
         <div class="tab-pane fade" role="tabpanel" id="adult">
@@ -61,15 +61,14 @@
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="../images/js/bootstrap.min.js"></script>
 <script>
-    $(function () {
-                var i = Math.floor(Math.random() * 50);
-                var j = Math.floor(Math.random() * 50);
-                var op = Math.floor(Math.random() * 2);
+    $(document).ready(function () {
                 var an = 0;
                 var score = 0;
-
-                function getQuestion() {
-
+                //得到随机算数
+                var getQuestion = function () {
+                    var i = Math.floor(Math.random() * 50);
+                    var j = Math.floor(Math.random() * 50);
+                    var op = Math.floor(Math.random() * 2);
                     if (op >= 1) {
                         $(".question").text(i + " + " + j + " = ");
                         an = i + j;
@@ -77,10 +76,21 @@
                         $(".question").text(i + " - " + j + " = ");
                         an = i - j;
                     }
-                }
-
-                setInterval(getQuestion, 100);
-
+                };
+                //检查计算是否正确
+                var checkScore = function () {
+                  if($(".answer").val() === an.toString())
+                  {
+                        $(".answer").css("background","green");
+                        $(".answer").attr("readonly","true");
+                      score += 10;
+                  }else{
+                      $(".answer").css("background","white");
+                  }
+                };
+                $(".answer").on("keyup keydown",checkScore);
+                getQuestion();
+                window.setInterval(getQuestion, 50000);
             }
     )
 </script>
