@@ -24,7 +24,7 @@
         <div class="col-xs-12">
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-primary active">
-                    <input type="radio" name="options"  value="child" autocomplete="off" checked>儿童(10以内加法)
+                    <input type="radio" name="options" id="shao" value="child" autocomplete="off" checked>儿童(10以内加法)
                 </label>
                 <label class="btn btn-primary">
                     <input type="radio" name="options" value="adult" autocomplete="off">成人(100以内加减法)
@@ -53,10 +53,10 @@
                         <span aria-hidden="true">&times;</span>
                         <span class="sr-only">Close</span>
                     </button>
-                    <h4 class="modal-title" id="result">得分</h4>
+                    <h4 class="modal-title" >得分</h4>
                 </div>
                 <div class="modal-body">
-                    <h2 class="scoreText"></h2>
+                    <h2 class="scoreText text-center"></h2>
                 </div>
             </div>
         </div>
@@ -64,6 +64,7 @@
 
 
 </div>
+
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="../images/js/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -82,28 +83,28 @@
                 var isTrue = false;
                 var maxNum = 5;
                 var opNum = 1;
+                //开始时间
+                var start ;
 
                 var checkStatus = function () {
                     if($(this).val() == "child"){
                         maxNum = 5;
                         opNum = 1;
-                        alert("child");
                     }else{
                         maxNum = 50;
-                        opNum = 2;
-                        alert("adult");
+                        opNum = 1;
                     }
                 };
                 //得到随机算数
                 var getQuestion = function () {
                     if (times <= 10) {
-                        var i = Math.floor(Math.random() * maxNum);
-                        var j = Math.floor(Math.random() * maxNum);
+                        var i = Math.floor(Math.random() * maxNum)+1;
+                        var j = Math.floor(Math.random() * maxNum)+1;
                         var op = Math.floor(Math.random() * opNum);
-                        if (isTrue) {
-                            score += 10;
-                        }
-                        if (op <= 1) {
+//                        if (isTrue) {
+//                            score += 10;
+//                        }
+                        if (op < 1) {
                             $(".question").text(i + " + " + j + " = ");
                             an = i + j;
                         } else {
@@ -112,11 +113,12 @@
                         }
                         $(".answer").val("").focus();
                         times++;
-                        timeId = setTimeout(getQuestion, 3000 - 100 * times);
+//                        timeId = setTimeout(getQuestion, 4000 - 100 * times);
                     } else {
-                        $(".scoreText").text("最后得分：" + score);
+                        var spend = (new Date().getTime() - start)/1000;
+                        $(".scoreText").html("总耗时：<span>" + spend.toString()+"</span> 秒!");
                         $(".modal").modal("show");
-                        score = 0;
+//                        score = 0;
                         times = 1;
                     }
                 };
@@ -125,20 +127,20 @@
                 var checkScore = function () {
                     if ($.trim($(".answer").val()) === an.toString()) {
                         isTrue = true;
-                        clearTimeout(timeId);
+//                        clearTimeout(timeId);
                         getQuestion();
                     } else {
                         isTrue = false;
                     }
                 };
 
+                //绑定事件
                 $(".answer").on("keyup keyown", checkScore);
-                $(".start").on("click", getQuestion);
-                $(":radio").each(function () {
-                    $(this).on("click",function () {
-                        alert("feng");
-                    });
+                $(".start").on("click", function () {
+                     start = new Date().getTime();
+                    getQuestion();
                 });
+                $(":radio").change(checkStatus);
 //                getQuestion();
             }
     )
