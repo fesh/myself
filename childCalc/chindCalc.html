@@ -20,41 +20,49 @@
     <h1>看看谁最能“算计”</h1>
 </div>
 <div class="container">
-    <ul class="nav nav-tabs" role="tablist">
-        <li role="presentation" class="active">
-            <a role="tab" data-toggle="tab" href="#child">儿童</a>
-        </li>
-        <li role="presentation">
-            <a role="tab" data-toggle="tab" href="#adult">成人</a>
-        </li>
-    </ul>
-    <!-- tab panes -->
-    <div class="tab-content">
-        <div role="tabpanel" class="tab-pane fade in active" id="child">
-            <br>
-
-            <div class="row">
-                <div class="col-xs-11">
-                    <input type="button" class="btn btn-default" value="开始" />
-                    <!--<div class="input-group">-->
-                    <!--<span class="input-group-addon">-->
-                    <!--<input type="checkbox"/>-->
-                    <!--</span>-->
-                    <!--<input type="text" class="form-control"/>-->
-                    <!--</div>-->
-                </div>
-            </div>
-            <h2>成绩：<span>90</span></h2>
-
-            <div class="input-group">
-                <span class="input-group-addon question"></span>
-                <input type="number" class="form-control answer" placeholder="" >
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="btn-group" data-toggle="buttons">
+                <label class="btn btn-primary active">
+                    <input type="radio" name="options"  value="child" autocomplete="off" checked>儿童(10以内加法)
+                </label>
+                <label class="btn btn-primary">
+                    <input type="radio" name="options" value="adult" autocomplete="off">成人(100以内加减法)
+                </label>
             </div>
         </div>
-        <div class="tab-pane fade" role="tabpanel" id="adult">
-
+        <div class="col-xs-12"><br></div>
+        <div class="col-xs-11">
+            <input type="button" class="btn btn-primary start " value="开始 算计"/>
         </div>
     </div>
+
+    <br>
+
+    <div class="input-group">
+        <span class="input-group-addon question"></span>
+        <input type="number" class="form-control answer" placeholder="">
+    </div>
+
+    <!--显示得分-->
+    <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="result" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                    </button>
+                    <h4 class="modal-title" id="result">得分</h4>
+                </div>
+                <div class="modal-body">
+                    <h2 class="scoreText"></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </div>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="../images/js/jquery.min.js"></script>
@@ -62,35 +70,76 @@
 <script src="../images/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
+                //答案
                 var an = 0;
+                //总分
                 var score = 0;
-                //得到随机算数
-                var getQuestion = function () {
-                    var i = Math.floor(Math.random() * 50);
-                    var j = Math.floor(Math.random() * 50);
-                    var op = Math.floor(Math.random() * 2);
-                    if (op >= 1) {
-                        $(".question").text(i + " + " + j + " = ");
-                        an = i + j;
-                    } else {
-                        $(".question").text(i + " - " + j + " = ");
-                        an = i - j;
+                //次数
+                var times = 1;
+                //定时id
+                var timeId;
+                //计算是否正确
+                var isTrue = false;
+                var maxNum = 5;
+                var opNum = 1;
+
+                var checkStatus = function () {
+                    if($(this).val() == "child"){
+                        maxNum = 5;
+                        opNum = 1;
+                        alert("child");
+                    }else{
+                        maxNum = 50;
+                        opNum = 2;
+                        alert("adult");
                     }
                 };
+                //得到随机算数
+                var getQuestion = function () {
+                    if (times <= 10) {
+                        var i = Math.floor(Math.random() * maxNum);
+                        var j = Math.floor(Math.random() * maxNum);
+                        var op = Math.floor(Math.random() * opNum);
+                        if (isTrue) {
+                            score += 10;
+                        }
+                        if (op <= 1) {
+                            $(".question").text(i + " + " + j + " = ");
+                            an = i + j;
+                        } else {
+                            $(".question").text(i + " - " + j + " = ");
+                            an = i - j;
+                        }
+                        $(".answer").val("").focus();
+                        times++;
+                        timeId = setTimeout(getQuestion, 3000 - 100 * times);
+                    } else {
+                        $(".scoreText").text("最后得分：" + score);
+                        $(".modal").modal("show");
+                        score = 0;
+                        times = 1;
+                    }
+                };
+
                 //检查计算是否正确
                 var checkScore = function () {
-                  if($(".answer").val() === an.toString())
-                  {
-                        $(".answer").css("background","green");
-                        $(".answer").attr("readonly","true");
-                      score += 10;
-                  }else{
-                      $(".answer").css("background","white");
-                  }
+                    if ($.trim($(".answer").val()) === an.toString()) {
+                        isTrue = true;
+                        clearTimeout(timeId);
+                        getQuestion();
+                    } else {
+                        isTrue = false;
+                    }
                 };
-                $(".answer").on("keyup keydown",checkScore);
-                getQuestion();
-                window.setInterval(getQuestion, 50000);
+
+                $(".answer").on("keyup keyown", checkScore);
+                $(".start").on("click", getQuestion);
+                $(":radio").each(function () {
+                    $(this).on("click",function () {
+                        alert("feng");
+                    });
+                });
+//                getQuestion();
             }
     )
 </script>
