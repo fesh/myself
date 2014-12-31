@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>算计</title>
     <!-- Bootstrap -->
-    <link href="../images/css/bootstrap.min.css" rel="stylesheet">
-    <link href="../images/css/childCalc.css" rel="stylesheet">
+    <link href="images/bootstrap.min.css" rel="stylesheet">
+    <link href="images/childCalc.css" rel="stylesheet">
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>
@@ -16,23 +16,23 @@
     <![endif]-->
 </head>
 <body>
-<div class="page-header">
-    <h1>看看谁最能“算计”</h1>
+<div class="page-header text-center">
+    <h1>我是神算手</h1>
 </div>
 <div class="container">
     <div class="row">
         <div class="col-xs-12">
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-primary active">
-                    <input type="radio" name="options" id="shao" value="child" autocomplete="off" checked>儿童(10以内加法)
+                    <input type="radio" name="options" id="shao" value="child" autocomplete="off" checked>儿童
                 </label>
                 <label class="btn btn-primary">
-                    <input type="radio" name="options" value="adult" autocomplete="off">成人(100以内加减法)
+                    <input type="radio" name="options" value="adult" autocomplete="off">成人
                 </label>
             </div>
         </div>
         <div class="col-xs-12"><br></div>
-        <div class="col-xs-11">
+        <div class="col-xs-11 text-center">
             <input type="button" class="btn btn-primary start " value="开始 算计"/>
         </div>
     </div>
@@ -50,10 +50,10 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">
-                        <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true">×</span>
                         <span class="sr-only">Close</span>
                     </button>
-                    <h4 class="modal-title" >得分</h4>
+                    <h4 class="modal-title" >大脑回路时间</h4>
                 </div>
                 <div class="modal-body">
                     <h2 class="scoreText text-center"></h2>
@@ -62,13 +62,15 @@
         </div>
     </div>
 
-
+<div class="right">
+        <span class="livcms_cell" style="FONT-SIZE: 9pt;COLOR:#FFFFFF;BACKGROUND-COLOR:#FF0000">liv_right</span>
+    </div>
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="../images/js/jquery.min.js"></script>
+<script src="images/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
-<script src="../images/js/bootstrap.min.js"></script>
+<script src="images/bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
                 //答案
@@ -82,24 +84,30 @@
                 //计算是否正确
                 var isTrue = false;
                 var maxNum = 5;
+                var liNum = 1;
                 var opNum = 1;
+                var showTitle = "（儿童版）";
                 //开始时间
                 var start ;
 
                 var checkStatus = function () {
                     if($(this).val() == "child"){
                         maxNum = 5;
+                        liNum = 1;
                         opNum = 1;
+                        showTitle = "（儿童版）";
                     }else{
-                        maxNum = 50;
+                        maxNum = 40;
+                        liNum = 11;
                         opNum = 1;
+                        showTitle = "（成人版）";
                     }
                 };
                 //得到随机算数
                 var getQuestion = function () {
                     if (times <= 10) {
-                        var i = Math.floor(Math.random() * maxNum)+1;
-                        var j = Math.floor(Math.random() * maxNum)+1;
+                        var i = Math.floor(Math.random() * maxNum)+liNum;
+                        var j = Math.floor(Math.random() * maxNum)+liNum;
                         var op = Math.floor(Math.random() * opNum);
 //                        if (isTrue) {
 //                            score += 10;
@@ -116,7 +124,13 @@
 //                        timeId = setTimeout(getQuestion, 4000 - 100 * times);
                     } else {
                         var spend = (new Date().getTime() - start)/1000;
-                        $(".scoreText").html("总耗时：<span>" + spend.toString()+"</span> 秒!");
+                        var sp = Math.floor(spend - 5 >20?20:spend - 5);
+                        sp = 100-sp*0.5;
+                        var result = showTitle+"总耗时：<br /><span>" + spend.toString()+"</span> 秒!<br>"+
+                                "击败了全国"+sp+"%的网友，敢来挑战吗？";
+                        $(".scoreText").html(result);
+                        //title
+                        $(document).attr("title",result);
                         $(".modal").modal("show");
 //                        score = 0;
                         times = 1;
@@ -130,7 +144,13 @@
 //                        clearTimeout(timeId);
                         getQuestion();
                     } else {
+                       $(".scoreText").html("您这水平，笨死你得了 别逗了，您这水平也想赢！不服叫人一起来赢我");
+                        $(".modal").modal("show");
+                        times = 1;
+                        $(".answer").val("");
+                        $(".question").text("");
                         isTrue = false;
+                        return false;
                     }
                 };
 
@@ -138,6 +158,7 @@
                 $(".answer").on("keyup keyown", checkScore);
                 $(".start").on("click", function () {
                      start = new Date().getTime();
+                    times = 1;
                     getQuestion();
                 });
                 $(":radio").change(checkStatus);
@@ -147,3 +168,4 @@
 </script>
 </body>
 </html>
+

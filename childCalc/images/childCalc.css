@@ -1,0 +1,16 @@
+.question {
+  font-size: 40px;
+  width: 50%; }
+
+.answer {
+  height: 140px;
+  font-size: 40px;
+  width: 50%; }
+
+.scoreText span {
+  color: red;
+  font-size: 80px; }
+
+.right {
+  text-align: center;
+  line-height: 40px; }
