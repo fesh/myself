@@ -80,9 +80,7 @@
                 //次数
                 var times = 1;
                 //定时id
-                var timeId;
                 //计算是否正确
-                var isTrue = false;
                 var maxNum = 5;
                 var liNum = 1;
                 var opNum = 1;
@@ -90,6 +88,7 @@
                 //开始时间
                 var start ;
 
+                //设置版本
                 var checkStatus = function () {
                     if($(this).val() == "child"){
                         maxNum = 5;
@@ -109,9 +108,7 @@
                         var i = Math.floor(Math.random() * maxNum)+liNum;
                         var j = Math.floor(Math.random() * maxNum)+liNum;
                         var op = Math.floor(Math.random() * opNum);
-//                        if (isTrue) {
-//                            score += 10;
-//                        }
+//
                         if (op < 1) {
                             $(".question").text(i + " + " + j + " = ");
                             an = i + j;
@@ -121,18 +118,18 @@
                         }
                         $(".answer").val("").focus();
                         times++;
-//                        timeId = setTimeout(getQuestion, 4000 - 100 * times);
                     } else {
                         var spend = (new Date().getTime() - start)/1000;
+                        //计算排名
                         var sp = Math.floor(spend - 5 >20?20:spend - 5);
                         sp = 100-sp*0.5;
+                        
                         var result = showTitle+"总耗时：<br /><span>" + spend.toString()+"</span> 秒!<br>"+
                                 "击败了全国"+sp+"%的网友，敢来挑战吗？";
                         $(".scoreText").html(result);
-                        //title
-                        $(document).attr("title",result);
+                        $(document).attr("title",showTitle+"总耗时：" + spend.toString()+" 秒!"+
+                                "击败了全国"+sp+"%的网友，敢来挑战吗？");
                         $(".modal").modal("show");
-//                        score = 0;
                         times = 1;
                     }
                 };
@@ -140,17 +137,14 @@
                 //检查计算是否正确
                 var checkScore = function () {
                     if ($.trim($(".answer").val()) === an.toString()) {
-                        isTrue = true;
-//                        clearTimeout(timeId);
                         getQuestion();
                     } else {
-                       $(".scoreText").html("您这水平，笨死你得了 别逗了，您这水平也想赢！不服叫人一起来赢我");
-                        $(".modal").modal("show");
-                        times = 1;
-                        $(".answer").val("");
-                        $(".question").text("");
-                        isTrue = false;
-                        return false;
+//                       $(".scoreText").html("您这水平，笨死你得了 别逗了，您这水平也想赢！不服叫人一起来赢我");
+//                        $(".modal").modal("show");
+//                        times = 1;
+//                        $(".answer").val("");
+//                        $(".question").text("");
+//                        return false;
                     }
                 };
 
