@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+        
 <html lang="zh-cn">
 <head>
     <meta charset="utf-8">
@@ -16,27 +17,31 @@
     <![endif]-->
 </head>
 <body>
+<div id="mcover" style="display: none;">
+    <img src="images/share.png">
+</div>
 <div class="page-header text-center">
     <h1>我是神算手</h1>
 </div>
 <div class="container">
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12 text-center">
             <div class="btn-group" data-toggle="buttons">
                 <label class="btn btn-primary active">
-                    <input type="radio" name="options" id="shao" value="child" autocomplete="off" checked>儿童
+                    <input type="radio" name="options" value="adult" autocomplete="off" checked><strong
+                        class="h4">成人版</strong>
                 </label>
                 <label class="btn btn-primary">
-                    <input type="radio" name="options" value="adult" autocomplete="off">成人
+                    <input type="radio" name="options" value="child" autocomplete="off"><strong class="h4"> 儿童版</strong>
                 </label>
+
             </div>
         </div>
         <div class="col-xs-12"><br></div>
-        <div class="col-xs-11 text-center">
-            <input type="button" class="btn btn-primary start " value="开始 算计"/>
+        <div class="col-xs-12 text-center">
+            <input type="button" class="btn btn-primary start " value="启动大脑回路"/>
         </div>
     </div>
-
     <br>
 
     <div class="input-group">
@@ -53,16 +58,17 @@
                         <span aria-hidden="true">×</span>
                         <span class="sr-only">Close</span>
                     </button>
-                    <h4 class="modal-title" >大脑回路时间</h4>
+                    <h4 class="modal-title">大脑回路时间</h4>
                 </div>
                 <div class="modal-body">
-                    <h2 class="scoreText text-center"></h2>
+                    <h4 class="scoreText text-center"></h4>
+                    <input type="button" class="btn btn-info" value="再来一次" id="restart"/>
+                    <input type="button" class="btn btn-info" value="分享到朋友圈" id="share"/>
                 </div>
             </div>
         </div>
     </div>
-
-<div class="right">
+    <div class="right">
         <span class="livcms_cell" style="FONT-SIZE: 9pt;COLOR:#FFFFFF;BACKGROUND-COLOR:#FF0000">liv_right</span>
     </div>
 </div>
@@ -79,34 +85,32 @@
                 var score = 0;
                 //次数
                 var times = 1;
-                //定时id
-                //计算是否正确
-                var maxNum = 5;
-                var liNum = 1;
+
+                //计算参数
+                var maxNum = 40;
+                var liNum = 11;
                 var opNum = 1;
-                var showTitle = "（儿童版）";
+
                 //开始时间
-                var start ;
+                var start;
 
                 //设置版本
                 var checkStatus = function () {
-                    if($(this).val() == "child"){
+                    if ($(this).val() == "child") {
                         maxNum = 5;
                         liNum = 1;
                         opNum = 1;
-                        showTitle = "（儿童版）";
-                    }else{
+                    } else {
                         maxNum = 40;
                         liNum = 11;
                         opNum = 1;
-                        showTitle = "（成人版）";
                     }
                 };
                 //得到随机算数
                 var getQuestion = function () {
                     if (times <= 10) {
-                        var i = Math.floor(Math.random() * maxNum)+liNum;
-                        var j = Math.floor(Math.random() * maxNum)+liNum;
+                        var i = Math.floor(Math.random() * maxNum) + liNum;
+                        var j = Math.floor(Math.random() * maxNum) + liNum;
                         var op = Math.floor(Math.random() * opNum);
 //
                         if (op < 1) {
@@ -119,18 +123,34 @@
                         $(".answer").val("").focus();
                         times++;
                     } else {
-                        var spend = (new Date().getTime() - start)/1000;
+
+                        var spend = (new Date().getTime() - start) / 1000;
                         //计算排名
-                        var sp = Math.floor(spend - 5 >20?20:spend - 5);
-                        sp = 100-sp*0.5;
-                        
-                        var result = showTitle+"总耗时：<br /><span>" + spend.toString()+"</span> 秒!<br>"+
-                                "击败了全国"+sp+"%的网友，敢来挑战吗？";
-                        $(".scoreText").html(result);
-                        $(document).attr("title",showTitle+"总耗时：" + spend.toString()+" 秒!"+
-                                "击败了全国"+sp+"%的网友，敢来挑战吗？");
+                        var sp = Math.round(spend - 10);
+                        if (sp <= 0) {
+                            sp = 100;
+                        } else if (sp <= 5) {
+                            sp = 100 - 1 * sp;
+                        } else if (sp <= 15) {
+                            sp = 95 - 0.3 * (sp - 5);
+                        } else if (sp <= 20) {
+                            sp = 92 - 0.4 * (sp - 15);
+                        } else {
+                            sp = 89;
+                        }
+                        if ($(":radio:checked").val() == "child") {
+                            $(".scoreText").html("总耗时：<br /><span>" + spend.toString() + "</span> 秒!<br>" +
+                                    "宝贝你很棒！再来一次你一定能做的更快。");
+                            $(document).attr("title", "我是神算手(儿童版)，我家宝贝真棒，只用了" + spend.toString() + " 秒!" +
+                                    "小朋友们，一起来玩儿吧~");
+                        } else {
+
+                            $(".scoreText").html("总耗时：<br /><span>" + spend.toString() + "</span> 秒!<br>" +
+                                    "击败了全国<i class='h3'>" + sp + "%</i>的网友，敢来挑战吗？");
+                            $(document).attr("title", "我是神算手(成人版)，我用了" + spend.toString() + " 秒!" +
+                                    "击败了全国" + sp + "%的网友，敢来挑战吗？");
+                        }
                         $(".modal").modal("show");
-                        times = 1;
                     }
                 };
 
@@ -148,14 +168,28 @@
                     }
                 };
 
+                var startGame = function () {
+                    start = new Date().getTime();
+                    times = 1;
+                    if ($("body").scrollTop() > 100) {
+                        $("body").animate({scrollTop: 100}, 500);
+                    }
+                    getQuestion();
+                };
                 //绑定事件
                 $(".answer").on("keyup keyown", checkScore);
-                $(".start").on("click", function () {
-                     start = new Date().getTime();
-                    times = 1;
-                    getQuestion();
+                $(".start").on("click", startGame);
+                $("#restart").on("click", function () {
+                    $(".modal").modal("hide");
+                    startGame();
                 });
                 $(":radio").change(checkStatus);
+                $("#share").click(function () {
+                    $("#mcover").css("display","block");
+                });
+                $("#mcover").click(function () {
+                    $("#mcover").css("display","none");
+                });
 //                getQuestion();
             }
     )
