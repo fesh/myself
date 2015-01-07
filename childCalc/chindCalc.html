@@ -39,7 +39,7 @@
         </div>
         <div class="col-xs-12"><br></div>
         <div class="col-xs-12 text-center">
-            <input type="button" class="btn btn-primary start " value="启动大脑回路"/>
+            <input type="button" class="btn btn-success start " value="启动大脑回路"/>
         </div>
     </div>
     <br>
@@ -62,8 +62,12 @@
                 </div>
                 <div class="modal-body">
                     <h4 class="scoreText text-center"></h4>
-                    <input type="button" class="btn btn-info" value="再来一次" id="restart"/>
-                    <input type="button" class="btn btn-info" value="分享到朋友圈" id="share"/>
+                    <button class="btn btn-info pull-right"  id="restart" >
+                        <img src="images/fire.jpeg" alt=""  width="22" height="22"/><span>不服</span>
+                    </button>
+                    <button class="btn "  id="share" >
+                        <img src="images/friend.png" alt=""  width="22" height="22"/><span>分享到朋友圈</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -108,6 +112,7 @@
                 };
                 //得到随机算数
                 var getQuestion = function () {
+                    $(".answer").val("").focus();
                     if (times <= 10) {
                         var i = Math.floor(Math.random() * maxNum) + liNum;
                         var j = Math.floor(Math.random() * maxNum) + liNum;
@@ -120,7 +125,6 @@
                             $(".question").text(i + " - " + j + " = ");
                             an = i - j;
                         }
-                        $(".answer").val("").focus();
                         times++;
                     } else {
 
@@ -142,7 +146,7 @@
                             $(".scoreText").html("总耗时：<br /><span>" + spend.toString() + "</span> 秒!<br>" +
                                     "宝贝你很棒！再来一次你一定能做的更快。");
                             $(document).attr("title", "我是神算手(儿童版)，我家宝贝真棒，只用了" + spend.toString() + " 秒!" +
-                                    "小朋友们，一起来玩儿吧~");
+                                    "一起来玩儿吧~");
                         } else {
 
                             $(".scoreText").html("总耗时：<br /><span>" + spend.toString() + "</span> 秒!<br>" +
@@ -171,26 +175,34 @@
                 var startGame = function () {
                     start = new Date().getTime();
                     times = 1;
-                    if ($("body").scrollTop() > 100) {
+//                    if ($("body").scrollTop() > 100) {
                         $("body").animate({scrollTop: 100}, 500);
-                    }
+//                    }
                     getQuestion();
                 };
                 //绑定事件
                 $(".answer").on("keyup keyown", checkScore);
                 $(".start").on("click", startGame);
                 $("#restart").on("click", function () {
+//                    $(".modal").modal("hide");
+//                    $("#mcover").css("display","block");
+//                    setTimeout(function () {
+//                        $("#mcover").css("display","none");
+//                        $(".answer").click();
+//                        startGame();
+//
+//                    },2000);
                     $(".modal").modal("hide");
                     startGame();
                 });
                 $(":radio").change(checkStatus);
+
                 $("#share").click(function () {
                     $("#mcover").css("display","block");
                 });
                 $("#mcover").click(function () {
                     $("#mcover").css("display","none");
                 });
-//                getQuestion();
             }
     )
 </script>
