@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+
+<html lang="zh-cn">
+<head>
+    <div id="wx_pic" style="margin: 0 auto;display: none">
+        <img src="images/calc.jpg">
+    </div>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>【我是神算手】乐享平湖出品</title>
+    <!-- Bootstrap -->
+    <link href="images/bootstrap.min.css" rel="stylesheet">
+    <link href="images/childCalc.css" rel="stylesheet">
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div id="mcover" style="display: none;">
+    <img src="images/share.png">
+</div>
+
+<img src="images/calcBg.jpg" class="img-responsive" alt="" style="margin: 0 auto;"/>
+<img src="images/brain.jpg" alt="brain" class="img-responsive" id="brain" />
+<img src="images/light.jpg" align="" class="img-responsive start" title="点击开始" style="cursor: pointer" width="58" height="58"/>
+<span class="showTooltip">点击开始</span>
+<div class="container calc_content">
+<!--<div class="calc_content">-->
+<div class="row">
+    <div class="col-xs-12 text-center">
+        <div class="btn-group" data-toggle="buttons">
+
+            <label class="btn btn-primary active selectRadio">
+                <input type="radio" name="options" value="adult" autocomplete="off" checked><strong
+                    class="h4">成人版</strong>
+            </label>
+            <label class="btn">
+            </label>
+            <label class="btn btn-primary selectRadio">
+                <input type="radio" name="options" value="child" autocomplete="off"><strong class="h4">
+                儿童版</strong>
+            </label>
+
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <br>
+    </div>
+    <div class="col-xs-12">
+        <button class="btn pull-right btn-link showScore">神算手英雄榜</button>
+    </div>
+</div>
+<div class="input-group calc_work">
+    <span class="input-group-addon question"></span>
+    <input type="number" class="form-control answer" placeholder="" style="height: 75px;">
+</div>
+<!--</div>-->
+
+<!--显示排名-->
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="result" aria-hidden="true" id="topTen">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <!--<h4 class="modal-title">（成人版）TOP 10 </h4>-->
+                <img src="images/scoreList_top.jpg" alt="" class="img-responsive"/>
+            </div>
+            <div class="modal-body ">
+                <div class="table-responsive">
+                    <table class="table table-striped table-condensed">
+                        <caption class="text-info" id="cot">Optional table caption.</caption>
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>昵称</th>
+                            <th>用时</th>
+                        </tr>
+                        </thead>
+                        <tbody id="scoreList">
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <button class="btn btn-info pull-right" id="restart1">
+                    <img src="images/fire.jpeg" alt="" width="22" height="22"/><span>不服</span>
+                </button>
+                <button class="btn" id="share1">
+                    <img src="images/friend.jpg" alt="" width="22" height="22"/><span>分享到朋友圈</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--显示得分-->
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="result" aria-hidden="true" id="scoreResult">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">×</span>
+                    <span class="sr-only">Close</span>
+                </button>
+                <img src="images/scoreShow_top.jpg" alt="" class="img-responsive"/>
+            </div>
+
+            <div class="modal-body">
+                <h4 class="scoreText text-center"></h4>
+                <button class="btn btn-info pull-right" id="restart">
+                    <img src="images/fire.jpeg" alt="" width="22" height="22"/><span>不服</span>
+                </button>
+                <button class="btn" id="share">
+                    <img src="images/friend.jpg" alt="" width="22" height="22"/><span>分享到朋友圈</span>
+                </button>
+
+                <div class="input-group clearfix " id="scoreUpdate" style="display: none;">
+                    <span class="input-group-addon">昵称：</span>
+                    <input type="text" name="userName" id="userName" class="form-control" placeholder="输入大名提交成绩">
+                        <span class="input-group-btn">
+                            <button class="btn btn-success" id="updateScore">提交</button>
+                        </span>
+                </div>
+                <div class="alert alert-success successMessage" role="alert">提交成功!</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<div class="right">
+    <p>技术支持及网络平台提供： 平湖西瓜网[www.xigo.tv] 乐享平湖
+        <script src="http://s11.cnzz.com/stat.php?id=4565370&web_id=4565370&show=pic"
+                language="JavaScript"></script>
+    </p>
+</div>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="images/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="images/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function () {
+                //答案
+                var an = 0;
+                //总分
+                var score = 0;
+                //次数
+                var times = 1;
+
+                //计算参数
+                var maxNum = 40;
+                var liNum = 11;
+                var opNum = 1;
+
+                //开始时间
+                var start;
+                var spend;
+
+                //设置版本
+                var checkStatus = function () {
+                    if ($(this).val() == "child") {
+                        maxNum = 5;
+                        liNum = 1;
+                        opNum = 1;
+                    } else {
+                        maxNum = 40;
+                        liNum = 11;
+                        opNum = 1;
+                    }
+                };
+                //得到随机算数
+                var getQuestion = function () {
+                    $(".answer").val("").focus();
+                    if (times <= 10) {
+                        var i = Math.floor(Math.random() * maxNum) + liNum;
+                        var j = Math.floor(Math.random() * maxNum) + liNum;
+                        var op = Math.floor(Math.random() * opNum);
+//
+                        if (op < 1) {
+                            $(".question").text(i + " + " + j + " = ");
+                            an = i + j;
+                        } else {
+                            $(".question").text(i + " - " + j + " = ");
+                            an = i - j;
+                        }
+                        times++;
+                    } else {
+
+                        spend = (new Date().getTime() - start) / 1000;
+                        //计算排名
+                        var sp = Math.round(spend - 10);
+                        if (sp <= 0) {
+                            sp = 100;
+                        } else if (sp <= 5) {
+                            sp = 100 - 1 * sp;
+                        } else if (sp <= 15) {
+                            sp = 95 - 0.3 * (sp - 5);
+                        } else if (sp <= 20) {
+                            sp = 92 - 0.4 * (sp - 15);
+                        } else {
+                            sp = 89;
+                        }
+                        if ($(":radio:checked").val() == "child") {
+                            $(".scoreText").html("总耗时：<br /><span>" + spend.toString() + "</span> 秒!<br>" +
+                                    "宝贝你很棒！再来一次你一定能做的更快。");
+                            $(document).attr("title", "我是神算手(儿童版)，我家宝贝真棒，只用了" + spend.toString() + " 秒!" +
+                                    "一起来玩儿吧~");
+                            $("#scoreUpdate").hide();
+                        } else {
+
+                            $(".scoreText").html("总耗时：<br /><span>" + spend.toString() + "</span> 秒!<br>" +
+                                    "击败了全国<i class='h3'>" + sp + "%</i>的网友，敢来挑战吗？");
+                            $(document).attr("title", "我是神算手(成人版)，我用了" + spend.toString() + " 秒!" +
+                                    "击败了全国" + sp + "%的网友，敢来挑战吗？");
+                            $("#scoreUpdate").show();
+                        }
+                        $("#scoreResult").modal("show");
+                        $("#brain").attr("src", "images/brain.jpg");
+                    }
+                };
+
+                //检查计算是否正确
+                var checkScore = function () {
+                    if ($.trim($(".answer").val()) === an.toString()) {
+                        getQuestion();
+                    }
+                };
+
+                var startGame = function () {
+                    start = new Date().getTime();
+                    times = 1;
+                    $("#brain").attr("src", "images/brain_light.jpg");
+                    $("body").animate({scrollTop: 300}, 500);
+                    getQuestion();
+                };
+                //绑定事件
+                $(".answer").on("keyup keyown", checkScore);
+                $(".start").on("click", startGame);
+                $("#restart,#restart1").on("click", function () {
+//
+                    $("#topTen").modal("hide");
+                    $("#scoreResult").modal("hide");
+                    startGame();
+                });
+                $(":radio").change(checkStatus);
+
+                $("#share,#share1").click(function () {
+                    $("#mcover").css("display", "block");
+                });
+                $("#mcover").click(function () {
+                    $("#mcover").css("display", "none");
+                });
+                var showScore = function () {
+                    $.ajax({
+                                url: "calc.php",
+                                type: "post",
+                                data: {type: "s"},
+                                dataType: "json",
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    console.log("获取排名出错！");
+                                    console.log(textStatus);
+                                },
+                                success: function (data) {
+                                    $("#scoreList").empty();
+                                    if (data != null && typeof(data.length) != "undefined" && data.length > 0) {
+                                        $.each(data, function (cIndex, item) {
+                                            if (cIndex == 0) {
+                                                $("#cot").text("参与人数：" + item.cot);
+                                            }
+                                            var temp = "<tr><td>" + (cIndex + 1) + "</td><td>" + item.user_name + "</td><td>" + item.score + "秒</td></tr>";
+                                            $("#scoreList").append(temp);
+                                        });
+                                    }
+                                    $("#topTen").modal("show");
+                                    $(".table-responsive").fadeIn();
+                                }
+                            }
+                    );
+                };
+                var updateInfo = function () {
+                    if ($.trim($("#userName").val()) == "") {
+                        alert("输入昵称！");
+                        return false;
+                    }
+                    $.ajax({
+                                url: "calc.php",
+                                type: "POST",
+                                data: {userName: $("#userName").val(), score: spend, type: "i"},
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+
+                                    console.log("数据连接错误");
+                                },
+                                success: function (data) {
+                                    $(".alert-success").show().animate({bottom: "+30px"}, 1000).fadeOut();
+                                    $("#scoreResult").modal("hide");
+                                    showScore();
+                                }
+                            }
+                    );
+                };
+//                $("#scoreResult").modal("show");
+                $(".showScore").click(showScore);
+                $("#updateScore").click(updateInfo);
+                $(".showTooltip").fadeOut(5000);
+//                $(".start").tooltip({
+//                    delay:{"show":500,"hide":100}
+//
+//                });
+            }
+    );
+</script>
+</body>
+</html>
+
